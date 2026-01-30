@@ -158,7 +158,7 @@ CREATE TABLE `user` (
   `email` varchar(150) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `role_id` int DEFAULT 3,
-  `avatar` varchar(255) DEFAULT 'user.jpg',
+  `avatar` varchar(255) DEFAULT 'user.png',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
