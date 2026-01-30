@@ -6,11 +6,15 @@ require_once __DIR__ . '/../controller.php';
 require_once __DIR__ . '/../../entity/User.php';
 require_once __DIR__ . '/../../entity/Role.php';
 
-class UserController extends \Controller {
+class UserController extends \Controller
+{
     private $userModel;
     private $roleModel;
 
-    public function __construct() {
+    public function __construct()
+    {
+        // Only Admin can access User Management
+        $this->checkAuth(['admin']);
         $this->userModel = new \User();
         $this->roleModel = new \Role();
     }
@@ -18,22 +22,24 @@ class UserController extends \Controller {
     /**
      * List all users
      */
-    public function listUsers() {
+    public function listUsers()
+    {
         $users = $this->userModel->getAll();
-        
+
         // Get role names for each user
         foreach ($users as &$user) {
             $role = $this->roleModel->getById($user['role_id']);
             $user['role_name'] = $role ? $role['role_name'] : 'Unknown';
         }
-        
+
         $this->loadView('admin/user/list.php', ['users' => $users]);
     }
 
     /**
      * Show add user form
      */
-    public function addUser() {
+    public function addUser()
+    {
         $roles = $this->roleModel->getAll();
         $this->loadView('admin/user/add.php', ['roles' => $roles]);
     }
@@ -41,7 +47,8 @@ class UserController extends \Controller {
     /**
      * Create a new user
      */
-    public function createUser() {
+    public function createUser()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect($this->getBaseUrl() . '/admin/add-user');
             return;
@@ -52,8 +59,25 @@ class UserController extends \Controller {
             'password' => $_POST['password'] ?? '',
             'username' => $_POST['username'] ?? '',
             'phone' => $_POST['phone'] ?? '',
-            'role_id' => $_POST['role_id'] ?? 0
+            'role_id' => $_POST['role_id'] ?? 0,
+            'avatar' => 'user.jpg'
         ];
+
+        // Handle avatar upload
+        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../public/images/avatars/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $extension = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid() . '.' . $extension;
+            $uploadFile = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadFile)) {
+                $data['avatar'] = $fileName;
+            }
+        }
 
         // Validate input
         if (empty($data['email']) || empty($data['password']) || empty($data['username']) || empty($data['role_id'])) {
@@ -82,9 +106,10 @@ class UserController extends \Controller {
     /**
      * Show edit user form
      */
-    public function editUser() {
+    public function editUser()
+    {
         $userId = $_GET['id'] ?? null;
-        
+
         if (!$userId) {
             $_SESSION['error'] = 'User not found';
             $this->redirect($this->getBaseUrl() . '/admin/users');
@@ -92,7 +117,7 @@ class UserController extends \Controller {
         }
 
         $user = $this->userModel->getById($userId);
-        
+
         if (!$user) {
             $_SESSION['error'] = 'User not found';
             $this->redirect($this->getBaseUrl() . '/admin/users');
@@ -106,7 +131,8 @@ class UserController extends \Controller {
     /**
      * Update user
      */
-    public function updateUser() {
+    public function updateUser()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect($this->getBaseUrl() . '/admin/users');
             return;
@@ -155,8 +181,36 @@ class UserController extends \Controller {
             $data['password'] = $_POST['password'];
         }
 
+        // Handle avatar upload
+        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../public/images/avatars/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $extension = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid() . '.' . $extension;
+            $uploadFile = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadFile)) {
+                // Delete old avatar if not default
+                $oldAvatar = $user['avatar'] ?? 'user.jpg';
+                if ($oldAvatar !== 'user.jpg' && !empty($oldAvatar)) {
+                    $oldFile = $uploadDir . $oldAvatar;
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+                $data['avatar'] = $fileName;
+            }
+        }
+
         // Update user
         if ($this->userModel->update($userId, $data)) {
+            // Update session if editing self
+            if ($userId == $_SESSION['user_id'] && isset($data['avatar'])) {
+                $_SESSION['avatar'] = $data['avatar'];
+            }
             // $_SESSION['success'] = 'User updated successfully';
             $this->redirect($this->getBaseUrl() . '/admin/users');
         } else {
@@ -168,7 +222,8 @@ class UserController extends \Controller {
     /**
      * Delete user
      */
-    public function deleteUser() {
+    public function deleteUser()
+    {
         $userId = $_GET['id'] ?? null;
 
         if (!$userId) {
@@ -197,7 +252,8 @@ class UserController extends \Controller {
     /**
      * Show user details
      */
-    public function userDetails() {
+    public function userDetails()
+    {
         $userId = $_GET['id'] ?? null;
 
         if (!$userId) {

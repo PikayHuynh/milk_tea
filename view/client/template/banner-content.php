@@ -1,10 +1,9 @@
 <section class="py-5">
     <div class="container-fluid">
         <div class="row">
-            
+
             <div class="col-md-6">
-                <div class="banner-ad bg-danger mb-3" 
-                    style="background-image: url('<?php echo asset_url('client/images/thuong1.png')?>');
+                <div class="banner-ad bg-danger mb-3" style="background-image: url('<?php echo asset_url('client/images/slide-1.png') ?>');
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: right bottom;
@@ -29,8 +28,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="banner-ad bg-info" 
-                    style="background-image: url('<?php echo asset_url('client/images/hao1.png')?>');
+                <div class="banner-ad bg-info" style="background-image: url('<?php echo asset_url('client/images/slide-2.png') ?>');
                     background-repeat: no-repeat;
                     background-position: right bottom;
                     background-size: 300px 300px;">
@@ -52,7 +50,7 @@
 
                 </div>
             </div>
-                
+
         </div>
     </div>
 </section>

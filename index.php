@@ -15,6 +15,7 @@ require_once __DIR__ . '/route/router.php';
 // Include route files
 require_once __DIR__ . '/route/router.admin.php';
 require_once __DIR__ . '/route/router.client.php';
+require_once __DIR__ . '/route/router.auth.php';
 
 // Create router instance
 $router = new Router();
@@ -22,6 +23,7 @@ $router = new Router();
 // Register routes
 RouterAdmin::addURL($router);
 RouterClient::addURL($router);
+RouterAuth::addURL($router);
 
 // Dispatch the request
 $router->dispatch();

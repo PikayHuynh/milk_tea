@@ -1,70 +1,56 @@
 <?php
-    require_once __DIR__ . '/../../../database/config.php';
-    include __DIR__ . '/../template/header.php';
+require_once __DIR__ . '/../../../database/config.php';
+include __DIR__ . '/../template/header.php';
 ?>
 
 <div class="container-fluid pt-4 px-4">
-    <div class="row mb-4">
-        <div class="col-10">
-            <h2 class="h4">User Detail</h2>
-        </div>
-        <div class="col-2 text-end">
-            <a href="<?php echo BASE_URL; ?>admin/users" class="btn btn-outline-primary m-2">Back to List</a>
-        </div>
-    </div>
+    <div class="bg-light rounded p-4">
+        <h6 class="mb-4">Thông tin chi tiết người dùng</h6>
 
-     <?php if (!empty($_SESSION['error'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?>
-
-    <div class="row">
-        <div class="bg-light rounded h-100 p-4">
-            <div class="user-details">
+        <div class="row mb-4">
+            <div class="col-sm-3 text-center">
+                <?php
+                $avatarPath = get_avatar_url($user['avatar'] ?? null);
+                ?>
+                <img src="<?php echo $avatarPath; ?>" alt="User Avatar" class="img-fluid rounded-circle shadow-sm"
+                    style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #eee;">
+            </div>
+            <div class="col-sm-9">
                 <dl class="row">
                     <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9"><?php echo htmlspecialchars($user['user_id']); ?></dd>
-
-                    <dt class="col-sm-3">Email</dt>
-                    <dd class="col-sm-9"><?php echo htmlspecialchars($user['email']); ?></dd>
+                    <dd class="col-sm-9"><?php echo $user['user_id']; ?></dd>
 
                     <dt class="col-sm-3">Username</dt>
                     <dd class="col-sm-9"><?php echo htmlspecialchars($user['username']); ?></dd>
 
+                    <dt class="col-sm-3">Email</dt>
+                    <dd class="col-sm-9"><?php echo htmlspecialchars($user['email']); ?></dd>
+
+                    <dt class="col-sm-3">Phone</dt>
+                    <dd class="col-sm-9"><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></dd>
+
                     <dt class="col-sm-3">Role</dt>
                     <dd class="col-sm-9">
                         <?php
-                            $roleName = '';
-                            foreach ($roles as $role) {
-                                if ($role['role_id'] == $user['role_id']) { $roleName = $role['role_name']; break; }
+                        foreach ($roles as $role) {
+                            if ($role['role_id'] == $user['role_id']) {
+                                echo htmlspecialchars($role['role_name']);
+                                break;
                             }
-                            echo htmlspecialchars($roleName);
+                        }
                         ?>
                     </dd>
 
-                    <?php if (isset($user['phone'])): ?>
-                        <dt class="col-sm-3">Phone</dt>
-                        <dd class="col-sm-9"><?php echo htmlspecialchars($user['phone']); ?></dd>
-                    <?php endif; ?>
-
-                    <?php if (!empty($user['created_at'])): ?>
-                        <dt class="col-sm-3">Created At</dt>
-                        <dd class="col-sm-9"><?php echo htmlspecialchars($user['created_at']); ?></dd>
-                    <?php endif; ?>
+                    <dt class="col-sm-3">Created At</dt>
+                    <dd class="col-sm-9"><?php echo $user['created_at']; ?></dd>
                 </dl>
 
-                <a href="<?php echo BASE_URL; ?>admin/users" class="btn btn-outline-success m-2">Back to List</a>
-                <a href="<?php echo BASE_URL; ?>admin/edit-user?id=<?php echo $user['user_id']; ?>" class="btn btn-outline-warning m-2">Edit User</a>
+                <a href="<?php echo BASE_URL; ?>admin/edit-user?id=<?php echo $user['user_id']; ?>"
+                    class="btn btn-warning">Sửa</a>
+                <a href="<?php echo BASE_URL; ?>admin/users" class="btn btn-secondary">Quay lại</a>
             </div>
         </div>
-    </div>
 
-</div>
-
-
-
-<?php
-    include __DIR__ . '/../template/footer.php';
-?>
+        <?php
+        include __DIR__ . '/../template/footer.php';
+        ?>

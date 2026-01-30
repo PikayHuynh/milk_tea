@@ -14,3 +14,7 @@ try {
 }
 
 $conn = $DB['conn'];
+
+// Tự động khởi tạo dữ liệu hệ thống (Roles, Admin, Avatar column)
+require_once __DIR__ . '/init_helper.php';
+auto_init_database($conn);

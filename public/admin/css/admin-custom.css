@@ -1,0 +1,119 @@
+/* Admin Custom Styles - Dark Sidebar & Modern Header */
+
+/* Sidebar Dark Theme */
+.sidebar,
+.sidebar .navbar {
+    background-color: #191c24 !important;
+}
+
+.sidebar .navbar-brand {
+    background-color: #191c24 !important;
+    margin-bottom: 25px !important;
+    padding-top: 20px;
+}
+
+.sidebar .navbar-brand h3 {
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.sidebar .navbar-nav .nav-link {
+    padding: 10px 25px;
+    color: #6c7293 !important;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    transition: 0.3s;
+}
+
+.sidebar .navbar-nav .nav-link i {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 7px;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.sidebar .navbar-nav .nav-link:hover,
+.sidebar .navbar-nav .nav-link.active {
+    color: #ffffff !important;
+    background: #0f1015 !important;
+    border-left: 3px solid #009cff;
+}
+
+.sidebar .navbar-nav .nav-link:hover i,
+.sidebar .navbar-nav .nav-link.active i {
+    background: #009cff !important;
+    color: #ffffff !important;
+}
+
+.sidebar .user-info h6 {
+    color: #ffffff !important;
+}
+
+.sidebar .user-info span {
+    color: #6c7293 !important;
+    font-size: 13px;
+}
+
+/* Header - Navbar Improvements */
+.content .navbar {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+.sidebar-toggler {
+    background: #f0f2f5 !important;
+    color: #191c24 !important;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content .navbar .form-control {
+    background: #f0f2f5;
+    border-radius: 20px;
+    padding-left: 20px;
+}
+
+/* User Dropdown in Navbar */
+.nav-item.dropdown img {
+    border: 2px solid #009cff;
+    padding: 2px;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 10px !important;
+}
+
+.dropdown-item {
+    padding: 8px 20px;
+    transition: 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #009cff;
+}
+
+/* Responsive fixes */
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+
+    .sidebar.open {
+        margin-left: 0;
+    }
+}

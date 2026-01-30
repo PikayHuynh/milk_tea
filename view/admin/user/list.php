@@ -1,80 +1,62 @@
 <?php
-    require_once __DIR__ . '/../../../database/config.php';
-    include __DIR__ . '/../template/header.php';
+require_once __DIR__ . '/../../../database/config.php';
+include __DIR__ . '/../template/header.php';
 ?>
 
-
 <div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-10">
-            <h2 class="main-title">Users Management</h2>
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Danh sách người dùng</h6>
+            <a href="<?php echo BASE_URL; ?>admin/add-user" class="btn btn-primary">Thêm mới</a>
         </div>
-        <div class="col-2">
-            <a href="<?php echo BASE_URL; ?>admin/add-user" class="btn btn-outline-primary m-2">
-                <i class="feather icon-plus"></i> Add New User
-            </a>
-        </div>
+        
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+        <?php endif; ?>
 
-
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-
-                <?php if (!empty($_SESSION['success'])): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (!empty($_SESSION['error'])): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php endif; ?>
-
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $user): ?>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Role</th>
-                                <th scope="col">Action</th>
+                                <td>
+                                    <?php 
+                                    $avatarPath = get_avatar_url($user['avatar'] ?? null);
+                                    ?>
+                                    <img src="<?php echo $avatarPath; ?>" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                </td>
+                                <td><?php echo htmlspecialchars($user['username'] ?? ''); ?></td>
+                                <td><?php echo htmlspecialchars($user['email'] ?? ''); ?></td>
+                                <td><?php echo htmlspecialchars($user['role_name'] ?? ''); ?></td>
+                                <td>
+                                    <a class="btn btn-sm btn-info" href="<?php echo BASE_URL; ?>admin/show-user?id=<?php echo $user['user_id']; ?>">Xem</a>
+                                    <a class="btn btn-sm btn-warning" href="<?php echo BASE_URL; ?>admin/edit-user?id=<?php echo $user['user_id']; ?>">Sửa</a>
+                                    <a class="btn btn-sm btn-danger" href="<?php echo BASE_URL; ?>admin/delete-user?id=<?php echo $user['user_id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($users)): ?>
-                                <?php foreach ($users as $user): ?>
-                                    <tr>
-                                        <th><?php echo $user['user_id']; ?></th>
-                                        <td><?php echo $user['username']; ?></td>
-                                        <td><?php echo $user['email']; ?></td>
-                                        <td><?php echo $user['phone']; ?></td>
-                                        <td><?php echo $user['role_name']; ?></td>
-                                        <td>
-                                            <a class="btn btn-outline-primary m-2" href="<?php echo BASE_URL; ?>admin/show-user?id=<?php echo $user['user_id']; ?>">Show</a>
-                                            <a class="btn btn-outline-warning m-2" href="<?php echo BASE_URL; ?>admin/edit-user?id=<?php echo $user['user_id']; ?>">Edit</a>
-                                            <a class="btn btn-outline-danger m-2" href="<?php echo BASE_URL; ?>admin/delete-user?id=<?php echo $user['user_id'] ?>">Delete</a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="text-center">No users found</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="5" class="text-center">Không có người dùng nào.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
 <?php
-    include __DIR__ . '/../template/footer.php';
+include __DIR__ . '/../template/footer.php';
 ?>
