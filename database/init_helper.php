@@ -10,7 +10,7 @@ function auto_init_database($pdo)
         // 1. Đảm bảo cột avatar tồn tại (Phòng trường hợp DB cũ chưa update)
         $checkCol = $pdo->query("SHOW COLUMNS FROM `user` LIKE 'avatar'");
         if (!$checkCol->fetch()) {
-            $pdo->exec("ALTER TABLE `user` ADD COLUMN avatar VARCHAR(255) DEFAULT 'user.jpg' AFTER role_id");
+            $pdo->exec("ALTER TABLE `user` ADD COLUMN avatar VARCHAR(255) DEFAULT 'user.png' AFTER role_id");
         }
 
         // 2. Kiểm tra và tạo Roles

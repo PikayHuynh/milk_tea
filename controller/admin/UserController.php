@@ -60,7 +60,7 @@ class UserController extends \Controller
             'username' => $_POST['username'] ?? '',
             'phone' => $_POST['phone'] ?? '',
             'role_id' => $_POST['role_id'] ?? 0,
-            'avatar' => 'user.jpg'
+            'avatar' => 'user.png'
         ];
 
         // Handle avatar upload
@@ -194,8 +194,8 @@ class UserController extends \Controller
 
             if (move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadFile)) {
                 // Delete old avatar if not default
-                $oldAvatar = $user['avatar'] ?? 'user.jpg';
-                if ($oldAvatar !== 'user.jpg' && !empty($oldAvatar)) {
+                $oldAvatar = $user['avatar'] ?? 'user.png';
+                if ($oldAvatar !== 'user.png' && !empty($oldAvatar)) {
                     $oldFile = $uploadDir . $oldAvatar;
                     if (file_exists($oldFile)) {
                         unlink($oldFile);

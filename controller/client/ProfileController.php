@@ -80,7 +80,7 @@ class ProfileController extends \Controller
 
             if (move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadFile)) {
                 // Delete old avatar if not default
-                if (isset($user['avatar']) && $user['avatar'] !== 'user.jpg' && !empty($user['avatar'])) {
+                if (isset($user['avatar']) && $user['avatar'] !== 'user.png' && !empty($user['avatar'])) {
                     $oldFile = $uploadDir . $user['avatar'];
                     if (file_exists($oldFile)) {
                         unlink($oldFile);
